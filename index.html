@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日科技日报</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, "Noto Sans SC", "PingFang SC", sans-serif;
+            background: #0f172a; color: #e2e8f0;
+            max-width: 800px; margin: 0 auto; padding: 24px 16px;
+        }
+        header {
+            text-align: center; padding: 32px 0 24px;
+            border-bottom: 1px solid #1e293b;
+        }
+        header h1 { font-size: 28px; }
+        header p { color: #94a3b8; margin-top: 8px; font-size: 14px; }
+        .report-list { margin-top: 24px; }
+        .report-list a {
+            display: block; padding: 16px;
+            border: 1px solid #1e293b; border-radius: 8px;
+            margin-bottom: 12px; text-decoration: none;
+            color: #e2e8f0; transition: background 0.2s;
+        }
+        .report-list a:hover { background: #1e293b; }
+        .report-list .date { font-size: 18px; font-weight: 600; }
+        .report-list .preview { color: #94a3b8; font-size: 14px; margin-top: 4px; }
+        footer {
+            text-align: center; color: #475569; font-size: 12px;
+            margin-top: 40px; padding-top: 16px; border-top: 1px solid #1e293b;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>📰 每日科技日报</h1>
+        <p>知乎热榜 · Product Hunt · 由 OpenClaw + GLM-4.7 自动生成</p>
+    </header>
+    <div class="report-list" id="reports">
+        <p style="color:#64748b; text-align:center; padding:40px 0;">正在加载日报列表...</p>
+    </div>
+    <footer>Powered by OpenClaw &amp; GLM-4.7 | Auto-generated daily</footer>
+    <script>
+        fetch('reports/index.json')
+            .then(r => r.json())
+            .then(reports => {
+                const el = document.getElementById('reports');
+                if (!reports.length) { el.innerHTML = '<p style="color:#64748b;text-align:center;padding:40px">暂无日报</p>'; return; }
+                el.innerHTML = reports.map(r =>
+                    `<a href="reports/${r.file}">
+                        <div class="date">📅 ${r.date}</div>
+                        <div class="preview">${r.preview}</div>
+                    </a>`
+                ).join('');
+            })
+            .catch(() => {
+                document.getElementById('reports').innerHTML =
+                    '<p style="color:#64748b;text-align:center;padding:40px">暂无日报</p>';
+            });
+    </script>
+</body>
+</html>
